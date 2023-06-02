@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "food-classifier"
+version = "0.1.0"
+description = "Classifier for Food101 dataset using PyTorch (torchvision.datasets.Food101)"
+authors = ["chrrei <christian.reinecke@protonmail.com>"]
+readme = "README.md"
+packages = [
+    {include = "food_classifier"},
+    {include = "models"},
+    {include = "utils"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+torch = "^2.0.1"
+torchvision = "^0.15.2"
+matplotlib = "^3.7.1"
+numpy = "^1.24.3"
+lightning = "^2.0.2"
+
+[tool.poetry.scripts]
+main = "main:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
