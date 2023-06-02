@@ -1,2 +1,3 @@
 # food_classifier
-Classifies food items from the Food 101 dataset using PyTorch and Lightning.
+Classifies food items from the Food 101 dataset using PyTorch and Lightning.\
+[Link to assignment](assignment.md)
