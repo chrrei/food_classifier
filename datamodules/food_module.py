@@ -1,4 +1,5 @@
 import pytorch_lightning as pl
+import numpy as np
 import yaml
 from torch import manual_seed
 from torch.utils.data import random_split, DataLoader
@@ -29,6 +30,7 @@ class Food101DataModule(pl.LightningDataModule):
         val_size = len(food101_full) - train_size
 
         manual_seed(self.seed)
+        np.random.seed(self.seed)
         self.food101_train, self.food101_val = random_split(food101_full, [train_size, val_size])
 
     def train_dataloader(self):
