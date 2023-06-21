@@ -1,6 +1,7 @@
+use_gpu: false
 base_model: squeezenet
 pretrained: true
-pretrained_path: path/to/pretrained_weights.pt
+pretrained_path: models/saved/squeezenet_trained.pt
 initialized: false
 epochs: 10
 batch_size: 64

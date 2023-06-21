@@ -1,5 +1,6 @@
 import yaml
 import torch
+from pathlib import Path
 
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
@@ -11,7 +12,8 @@ from datamodules.food_module import Food101DataModule
 
 
 def main():
-    with open('./config/config.yaml', 'r') as file:
+    config_path = Path('./config/config.yaml')
+    with config_path.open('r') as file:
         config = yaml.safe_load(file)
 
     if config['base_model'] == 'squeezenet':
@@ -23,21 +25,26 @@ def main():
 
     trainer_model = FoodTrainer(model, config['learning_rate'])
 
-    data_module = Food101DataModule(config_file='./config/config.yaml')
+    data_module = Food101DataModule(config_file=config_path)
 
     logger = TensorBoardLogger('logs')
     lr_monitor = LearningRateMonitor(logging_interval='step')
     checkpoint_callback = ModelCheckpoint(dirpath='./checkpoints',
                                           save_last=True)
 
+    gpus = 1 if torch.cuda.is_available() and config['use_gpu'] else None
     trainer = Trainer(
         max_epochs=config['epochs'],
-        gpus=1,
+        gpus=gpus,
         logger=logger,
         callbacks=[lr_monitor, checkpoint_callback],
     )
 
     trainer.fit(trainer_model, datamodule=data_module)
 
-    torch.save(trainer_model.model.state_dict(),
-               f"{config['base_model']}_checkpoint.pt")
+    model_save_path = Path(f"./models/saved/{config['base_model']}_trained.pt")
+    torch.save(trainer_model.model.state_dict(), model_save_path)
+
+
+if __name__ == "__main__":
+    main()
