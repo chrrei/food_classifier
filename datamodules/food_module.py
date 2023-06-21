@@ -31,10 +31,13 @@ class Food101DataModule(pl.LightningDataModule):
 
         manual_seed(self.seed)
         np.random.seed(self.seed)
-        self.food101_train, self.food101_val = random_split(food101_full, [train_size, val_size])
+        self.food101_train, self.food101_val = \
+            random_split(food101_full, [train_size, val_size])
 
     def train_dataloader(self):
-        return DataLoader(self.food101_train, batch_size=64, shuffle=True, num_workers=4)
+        return DataLoader(self.food101_train, batch_size=64,
+                          shuffle=True, num_workers=4)
 
     def val_dataloader(self):
-        return DataLoader(self.food101_val, batch_size=64, shuffle=False, num_workers=4)
+        return DataLoader(self.food101_val, batch_size=64,
+                          shuffle=False, num_workers=4)
