@@ -1,6 +1,7 @@
 import yaml
 import torch
 from pathlib import Path
+# import ssl
 
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
@@ -12,6 +13,9 @@ from datamodules.food_module import Food101DataModule
 
 
 def main():
+    """ UNSAFE!!! REMOVE IF DATASET WAS DOWNLOADED """
+    # ssl._create_default_https_context = ssl._create_unverified_context
+
     config_path = Path('./config/config.yaml')
     with config_path.open('r') as file:
         config = yaml.safe_load(file)
@@ -31,27 +35,25 @@ def main():
             raise FileNotFoundError(
                 f"Saved model path not found: {model_save_path}")
 
-    trainer_model = FoodTrainer(model, config['learning_rate'])
-
     data_module = Food101DataModule(config_file=config_path)
+
+    trainer_model = FoodTrainer(model, config['learning_rate'], data_module)
 
     logger = TensorBoardLogger('logs')
     lr_monitor = LearningRateMonitor(logging_interval='step')
     checkpoint_callback = ModelCheckpoint(dirpath='./checkpoints',
                                           save_last=True)
 
-    gpus = 1 if torch.cuda.is_available() and config['use_gpu'] else None
     trainer = Trainer(
         max_epochs=config['epochs'],
-        gpus=gpus,
         logger=logger,
         callbacks=[lr_monitor, checkpoint_callback],
     )
-
     trainer.fit(trainer_model, datamodule=data_module)
 
     model_save_path = Path(f"./models/saved/{config['base_model']}_trained.pt")
-    torch.save(trainer_model.model.state_dict(), model_save_path)
+    with model_save_path.open('wb') as f:
+        torch.save(trainer_model.model.state_dict(), f)
 
 
 if __name__ == "__main__":

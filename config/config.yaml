@@ -2,8 +2,8 @@ use_gpu: false
 base_model: squeezenet
 pretrained: true
 saved_model_path: models/saved/squeezenet_trained.pt
-use_saved_model: true
-epochs: 10
+use_saved_model: false
+epochs: 5
 batch_size: 64
 learning_rate: 0.001
 augmentation: true
