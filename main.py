@@ -17,11 +17,19 @@ def main():
         config = yaml.safe_load(file)
 
     if config['base_model'] == 'squeezenet':
-        model = FoodSqueezenet()
+        model = FoodSqueezenet(config['pretrained'])
     elif config['base_model'] == 'resnet18':
-        model = FoodResnet18()
+        model = FoodResnet18(config['pretrained'])
     else:
         raise ValueError("Invalid base model specified in config.yaml.")
+
+    if config['use_saved_model']:
+        model_save_path = Path(config['saved_model_path'])
+        if model_save_path.exists():
+            model.load_state_dict(torch.load(model_save_path))
+        else:
+            raise FileNotFoundError(
+                f"Saved model path not found: {model_save_path}")
 
     trainer_model = FoodTrainer(model, config['learning_rate'])
 

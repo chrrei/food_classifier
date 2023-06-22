@@ -10,6 +10,7 @@ class FoodTrainer(pl.LightningModule):
         self.lr = lr
         self.train_accuracy = torchmetrics.Accuracy()
         self.val_accuracy = torchmetrics.Accuracy()
+        self.confusion_matrix = torchmetrics.ConfusionMatrix(num_classes=101)
 
     def forward(self, x):
         return self.model(x)
@@ -38,6 +39,7 @@ class FoodTrainer(pl.LightningModule):
         y_hat = self(x)
         loss = torch.nn.functional.cross_entropy(y_hat, y)
         acc = self.val_accuracy(torch.nn.functional.softmax(y_hat, dim=1), y)
+        conf_mat = self.confusion_matrix(y_hat.argmax(dim=1), y)
         self.log('val_loss',
                  loss,
                  on_step=True,
@@ -49,6 +51,10 @@ class FoodTrainer(pl.LightningModule):
                  on_step=True,
                  on_epoch=True,
                  prog_bar=True,
+                 logger=True)
+        self.log('val_confusion_matrix',
+                 conf_mat,
+                 on_epoch=True,
                  logger=True)
 
     def configure_optimizers(self):
