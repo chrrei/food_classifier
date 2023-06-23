@@ -105,7 +105,7 @@ def get_available_models(models_folder: Path):
 
 def get_class_name_dict():
     # Load the Food-101 dataset
-    food101_dataset = Food101(root='data/', download=False)
+    food101_dataset = Food101(root='data/', download=True)
     class_to_idx = food101_dataset.class_to_idx
     # Invert the dictionary to map indices to class names
     return {idx: class_name for class_name, idx in class_to_idx.items()}
