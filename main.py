@@ -1,7 +1,6 @@
 import yaml
 import torch
 from pathlib import Path
-# import ssl
 
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
@@ -13,9 +12,6 @@ from datamodules.food_module import Food101DataModule
 
 
 def main():
-    """ UNSAFE!!! REMOVE IF DATASET WAS DOWNLOADED """
-    # ssl._create_default_https_context = ssl._create_unverified_context
-
     config_path = Path('./config/config.yaml')
     with config_path.open('r') as file:
         config = yaml.safe_load(file)
