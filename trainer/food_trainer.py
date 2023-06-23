@@ -103,6 +103,9 @@ class FoodTrainer(pl.LightningModule):
         img_filepath = logs_folder / Path(img_filename)
         plt.savefig(img_filepath, format='png')
 
+        # like this?
+        # self.log.add_figure("Confusion matrix", fig, self.current_epoch)
+
         self.y_hats = []
         self.ys = []
         self.val_losses = []
