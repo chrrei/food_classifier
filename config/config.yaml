@@ -3,8 +3,8 @@ base_model: squeezenet
 pretrained: true
 saved_model_path: models/saved/squeezenet_trained.pt
 use_saved_model: false
-epochs: 5
-batch_size: 64
+epochs: 30
+batch_size: 32
 learning_rate: 0.001
 augmentation: true
 seed: 42
