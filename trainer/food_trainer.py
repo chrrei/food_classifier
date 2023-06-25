@@ -97,7 +97,7 @@ class FoodTrainer(pl.LightningModule):
                  logger=True)
 
         fig, ax = plt.subplots(figsize=(10, 10))
-        sns.heatmap(val_confusion_matrix, annot=True, ax=ax, cmap='coolwarm')
+        sns.heatmap(val_confusion_matrix.cpu(), annot=True, ax=ax, cmap='coolwarm')
         logs_folder = Path("./logs")
         img_filename = f"confusion_matrix_epoch_{self.current_epoch}.png"
         img_filepath = logs_folder / Path(img_filename)
