@@ -40,10 +40,17 @@ def main():
     checkpoint_callback = ModelCheckpoint(dirpath='./checkpoints',
                                           save_last=True)
 
+    if config['use_gpu']:
+        accelerator = 'gpu'
+        torch.set_float32_matmul_precision('medium')
+    else:
+        accelerator = 'cpu'
+
     trainer = Trainer(
         max_epochs=config['epochs'],
         logger=logger,
         callbacks=[lr_monitor, checkpoint_callback],
+        accelerator=accelerator,
     )
     trainer.fit(trainer_model, datamodule=data_module)
 
